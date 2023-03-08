@@ -8,7 +8,10 @@
 , [Jing Liao](https://liaojing.github.io/html/), [Bin Jiang](#jump1), [Wei Liu](https://scholar.google.com/citations?user=AjxoEpIAAAAJ&hl=zh-CN).<br>
 
 
-<video src="doc/Demo.mp4" controls="controls" width="960" height="540"></video>
+<video width="960" height="540" controls>
+    <source src="doc/Demo.mp4" type="video/mp4">
+</video>
+
 
 [//]: # (![edit_gif]&#40;./doc/edit.gif&#41;)
 ![DeFLOCNet Show](./doc/show.png)
