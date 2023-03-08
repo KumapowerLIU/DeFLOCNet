@@ -8,12 +8,14 @@
 , [Jing Liao](https://liaojing.github.io/html/), [Bin Jiang](#jump1), [Wei Liu](https://scholar.google.com/citations?user=AjxoEpIAAAAJ&hl=zh-CN).<br>
 
 
-<video width="960" height="540" controls>
-    <source src="doc/Demo.mp4" type="video/mp4">
-</video>
+[//]: # (<video width="960" height="540" controls>)
+
+[//]: # (    <source src="doc/Demo.mp4" type="video/mp4">)
+
+[//]: # (</video>)
 
 
-[//]: # (![edit_gif]&#40;./doc/edit.gif&#41;)
+![edit_gif](./doc/edit.gif)
 ![DeFLOCNet Show](./doc/show.png)
 
 ![DeFLOCNet Show](./doc/show2.png)
@@ -39,7 +41,7 @@ Prerequisites
 
 You need download the pre-trained model to the checkpoints file, you need put the pre-trained model for Places2 to the `checkpoints/nature` and 
 the pre-trained model for CelebA to the `checkpoints/face`. Then you can run the code: `demo.py` to edit the images. We give some example images in
-the folder `face_sample` and `nature_sample` respectively. Please see the video to tell you how to use our GUI!
+the folder `face_sample` and `nature_sample` respectively. Please see the gif to tell you how to use our GUI!
 
 
 ```bash
