@@ -26,7 +26,7 @@
 
 Clone this repo.
 ```bash
-git clone https://github.com/KumapowerLIU/DeFLOCNet.git
+git clone --branch legacy https://github.com/KumapowerLIU/DeFLOCNet.git
 ```
 
 Prerequisites
@@ -45,7 +45,7 @@ the folder `face_sample` and `nature_sample` respectively. Please see the gif to
 
 
 ```bash
-git clone https://github.com/KumapowerLIU/DeFLOCNet.git
+git clone --branch legacy https://github.com/KumapowerLIU/DeFLOCNet.git
 ```
 
 
