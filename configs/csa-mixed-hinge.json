@@ -1,0 +1,19 @@
+{
+  "train_manifest": "data/train.jsonl",
+  "validation_manifest": "data/validation.jsonl",
+  "train_sha256": "",
+  "validation_sha256": "",
+  "vgg_weights": "weights/vgg16-397923af.pth",
+  "hed_weights": "weights/hed-bsds500.pytorch",
+  "vgg_sha256": "397923af8e79cdbb6a7127f12361acd7a2f83e06b05044ddf496e83de57a5bf0",
+  "hed_sha256": "58a858782f5fa3e0ca3dc92e7a1a609add93987d77be3dfa54f8f8419d881a94",
+  "rtv_cache": "data/rtv-cache",
+  "existing_rtv_cache": "",
+  "batch_size": 64,
+  "microbatch_size": 16,
+  "workers": 16,
+  "memory_budget_gib": 15.0,
+  "save_every": 250,
+  "evaluate_every": 500,
+  "hed_postprocess": "hed_nms_medium_v1"
+}
