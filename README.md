@@ -2,18 +2,17 @@
 
 **Deep Image Editing via Flexible Low-Level Controls · CVPR 2021**
 
-[Paper](https://arxiv.org/abs/2103.12723) · [Models](https://huggingface.co/KumaPower/DeFLOCNet) · [Interactive Studio](https://huggingface.co/spaces/KumaPower/DeFLOCNet-Studio) · [Architecture notes](docs/REFACTOR.md) · [Original implementation](docs/LEGACY_README.md)
+[Paper](https://arxiv.org/abs/2103.12723) · [Models](https://huggingface.co/KumaPower/DeFLOCNet) · [Interactive Studio](https://huggingface.co/spaces/KumaPower/DeFLOCNet-Studio) · [Architecture notes](docs/SD_CONTROLS.md) · [Original CVPR 2021 code](https://github.com/KumapowerLIU/DeFLOCNet/tree/legacy)
 
 Edit an image by marking a hole, drawing optional sketch lines, and adding sparse
 color hints. DeFLOCNet propagates these controls through the generator to guide
 the content inside the hole. With no sketch or color hints, it performs ordinary
 image inpainting. Known pixels are copied from the prepared input image.
 
-This repository includes the original DeFLOCNet implementation, a PyTorch 2
-reference profile, and modern `sd_color_v2` experiments. The two downloadable
-models below use `sd_color_v2`: a single-pass RGB GAN with a residual U-Net and
-separate sketch/color feature paths, trained from scratch. Its SD-style building
-blocks do not require diffusion sampling or pretrained Stable Diffusion weights.
+The default branch contains the PyTorch 2 implementation and the current
+training and inference tools. Both downloadable models use `sd_color_v2`,
+a single-pass RGB GAN with a residual U-Net and separate sketch and color
+feature paths. Both were trained from scratch.
 
 ## Models
 
@@ -24,10 +23,9 @@ blocks do not require diffusion sampling or pretrained Stable Diffusion weights.
 
 The portrait model was trained in a dedicated HDTF run; the general model uses
 a mixed image collection that includes a small HDTF portrait component.
-Both operate on **256 × 256 RGB**. These are modern
-experimental checkpoints; the original paper architecture and benchmark setup
-are documented separately below. See the [model card](https://huggingface.co/KumaPower/DeFLOCNet)
-for checkpoint provenance and evaluation details.
+Both operate on **256 × 256 RGB**. See the
+[model card](https://huggingface.co/KumaPower/DeFLOCNet) for checkpoint
+provenance and evaluation details.
 
 Download one model for command-line inference, or both for the local comparison
 Studio:
@@ -234,29 +232,6 @@ Guided and no-control results are reported separately. Reference HED/RTV guides
 derived from the target contain information inside the hole, so guided metrics
 must be interpreted with that input condition.
 
-## Original paper and implementation
-
-The [CVPR 2021 method](https://arxiv.org/abs/2103.12723) injects sketch and color controls into structure generation
-blocks and combines structure and texture decoder features. The retained
-`released_v1` profile uses the original encoder, 21 SGB cells across six scales,
-and dual decoders. Its implementation and paper/code differences are described
-in the [correctness audit](docs/REFACTOR.md).
-
-```text
-Masked RGB + valid mask + noise → encoder → texture decoder
-                                    ↓            ↓ additions
-Sketch + sparse color + noise → six-scale SGBs → structure decoder → completed RGB
-```
-
-![Editing examples from the original DeFLOCNet project](doc/show.png)
-
-*Original project examples. The downloadable modern checkpoints use the
-separate `sd_color_v2` architecture and training recipes described above.*
-
-The original Qt demo, weight filenames, and legacy workflow are preserved in
-[the original README](docs/LEGACY_README.md). Modern and original checkpoint
-formats require their matching implementations.
-
 ## Data, testing, and citation
 
 Datasets, private manifests, and held-out HDTF previews are not bundled. Obtain images from
@@ -272,6 +247,14 @@ Run the software checks locally:
 python -m pip install -e '.[test]'
 pytest -q
 ```
+
+For a shallow clone, run `git fetch origin legacy` to enable the two tests that
+compare the PyTorch 2 reference profile against the original code.
+
+The [`legacy` branch](https://github.com/KumapowerLIU/DeFLOCNet/tree/legacy)
+contains the original CVPR 2021 implementation, Qt demo, and checkpoint
+instructions. See the [reference-profile audit](docs/REFACTOR.md) for the
+PyTorch 2 port of the paper architecture.
 
 ```bibtex
 @inproceedings{liu2021deflocnet,

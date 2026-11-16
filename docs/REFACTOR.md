@@ -1,9 +1,10 @@
 # Reference alignment and repaired training behavior
 
-The modern implementation follows the released network at commit
-`e8f2c3e` (full original commit is recorded by `git rev-parse HEAD`). This is a
-new experiment on the CSA mixed data, not a reproduction of the published
-Places2/CelebA-HQ scores.
+The `released_v1` reference profile follows the
+[original network](https://github.com/KumapowerLIU/DeFLOCNet/tree/e8f2c3ed39ee71dab609ca1fc62bcbadd146aa00).
+The training experiment used the CSA mixed dataset. See the
+[released model documentation](../README.md#models) for the `sd_color_v2`
+checkpoints.
 
 ## Network retained
 
@@ -81,7 +82,7 @@ unpacked. All RGB is EXIF-corrected, resized to 256 square with PIL bicubic,
 then optionally flipped. Masks use the CSA rectangles/strokes/mixed sampler,
 with 10%-40% missing area.
 
-RTV uses the MATLAB equations and parameters in this repo:
+RTV uses the [original MATLAB equations](https://github.com/KumapowerLIU/DeFLOCNet/blob/legacy/data/matlab/code/tsmooth.m) and parameters:
 lambda=0.015, sigma=3, sharpness=0.001, iterations=3. The SciPy direct sparse
 solve is reused from the audited MEDFE implementation. It is not a blur proxy.
 Existing content-checked MEDFE RTV entries are read without alteration; new

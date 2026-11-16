@@ -2,8 +2,8 @@
 
 - [DeFLOCNet paper, CVPR 2021](https://arxiv.org/abs/2103.12723), especially
   Figures 2-3 and Section 3.3.
-- [Original DeFLOCNet code](https://github.com/KumapowerLIU/DeFLOCNet), local
-  original files retained under `model`, `config`, `data`, and `demo.py`.
+- The `legacy` branch preserves the
+  [original DeFLOCNet code](https://github.com/KumapowerLIU/DeFLOCNet/tree/legacy).
 - HED: Saining Xie and Zhuowen Tu, *Holistically-Nested Edge Detection*, ICCV
   2015. [Original HED](https://github.com/s9xie/hed).
 - PyTorch HED implementation: Simon Niklaus,
@@ -23,9 +23,9 @@
 - VGG16: torchvision/ImageNet `vgg16-397923af.pth`, SHA256
   `397923af8e79cdbb6a7127f12361acd7a2f83e06b05044ddf496e83de57a5bf0`.
 - RTV: Li Xu et al., *Structure Extraction from Texture via Relative Total
-  Variation*, SIGGRAPH Asia 2012. The original MATLAB source/license remains
-  in `data/matlab/code/tsmooth.m`; the Python sparse-solver implementation was
-  reused from the local modern MEDFE project with identical parameters.
+  Variation*, SIGGRAPH Asia 2012. The Python sparse solver comes from the
+  modern MEDFE project and uses the same parameters as the
+  [original MATLAB source](https://github.com/KumapowerLIU/DeFLOCNet/blob/legacy/data/matlab/code/tsmooth.m).
 - Random masks: local modern CSA sampler, reused without a distribution change.
 
 Datasets remain subject to their original licenses. This repo contains neither

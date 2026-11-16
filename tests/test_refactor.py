@@ -8,6 +8,7 @@ from pathlib import Path
 import pickle
 import random
 import struct
+import subprocess
 
 import numpy as np
 from PIL import Image
@@ -24,13 +25,32 @@ from deflocnet.runtime import Config, capture_rng, restore_rng, save_checkpoint
 
 torch.set_num_threads(1)
 ROOT = Path(__file__).resolve().parents[1]
+LEGACY_COMMIT = "e8f2c3ed39ee71dab609ca1fc62bcbadd146aa00"
 
 
-def legacy(name):
-    spec = importlib.util.spec_from_file_location("reference_" + name, ROOT / "model/network" / (name + ".py"))
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+@pytest.fixture(scope="module")
+def legacy_networks(tmp_path_factory):
+    try:
+        subprocess.run(
+            ["git", "cat-file", "-e", f"{LEGACY_COMMIT}^{{commit}}"],
+            cwd=ROOT, capture_output=True, check=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        pytest.skip("Original DeFLOCNet commit unavailable; run git fetch origin legacy in a Git clone")
+
+    reference_dir = tmp_path_factory.mktemp("deflocnet_reference")
+    modules = {}
+    for name in ("encoder", "decoder", "structure_generation_block"):
+        filename = f"{name}.py"
+        path = reference_dir / filename
+        path.write_bytes(subprocess.check_output(
+            ["git", "show", f"{LEGACY_COMMIT}:model/network/{filename}"], cwd=ROOT,
+        ))
+        spec = importlib.util.spec_from_file_location(f"reference_{name}", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        modules[name] = module
+    return modules
 
 
 def inputs(batch=1):
@@ -40,13 +60,13 @@ def inputs(batch=1):
     return image, hole, torch.rand_like(image) * hole, torch.rand_like(image) * hole, torch.rand_like(image)
 
 
-def test_full_generator_matches_released_network():
+def test_full_generator_matches_released_network(legacy_networks):
     """Full-width, all 21 SGB cells and both decoders, identical state/input."""
     torch.manual_seed(27)
     modern = Generator(checkpoint_sgb=False).eval()
-    en = legacy("encoder").Encoder(input_nc=9, norm_layer=nn.InstanceNorm2d).eval()
-    de = legacy("decoder").Decoder(norm_layer=nn.InstanceNorm2d).eval()
-    edit = legacy("structure_generation_block").Edit().eval()
+    en = legacy_networks["encoder"].Encoder(input_nc=9, norm_layer=nn.InstanceNorm2d).eval()
+    de = legacy_networks["decoder"].Decoder(norm_layer=nn.InstanceNorm2d).eval()
+    edit = legacy_networks["structure_generation_block"].Edit().eval()
     for i, block in enumerate(modern.encoder.blocks, 1):
         getattr(en, f"Encoder_{i}").model.load_state_dict(block.state_dict())
     en.middle.load_state_dict(modern.encoder.middle.state_dict())
@@ -66,10 +86,10 @@ def test_full_generator_matches_released_network():
     torch.testing.assert_close(actual, expected, atol=0, rtol=0)
 
 
-def test_sgb_backward_matches_reference():
+def test_sgb_backward_matches_reference(legacy_networks):
     torch.manual_seed(3)
     modern = StructureGenerationBlock(8, 3)
-    old = legacy("structure_generation_block").Edit_block(3, 8, 8)
+    old = legacy_networks["structure_generation_block"].Edit_block(3, 8, 8)
     old.load_state_dict(modern.state_dict())
     x = torch.randn(2, 8, 16, 16)
     guides = [torch.rand(2, 3, 32, 32) for _ in range(3)] + [torch.ones(2, 1, 32, 32)]
