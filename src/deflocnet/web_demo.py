@@ -278,7 +278,7 @@ def build_demo(engine, samples: dict[int, FaceSample] | None = None, *, align_po
                 gr.Markdown("## Results")
                 model_choice = gr.Radio([(title(name), name) for name in names] + [(BOTH, BOTH)],
                                         value=names[0], label="Model")
-                run = gr.Button("Run inpainting", variant="primary", elem_id="run-comparison")
+                run = gr.Button("Run inpainting", variant="primary", interactive=False, elem_id="run-comparison")
                 status = gr.Markdown(START)
                 with gr.Tabs():
                     with gr.Tab("Completion"):
@@ -307,12 +307,13 @@ def build_demo(engine, samples: dict[int, FaceSample] | None = None, *, align_po
                     object_fit="contain", interactive=False, allow_preview=False, buttons=[], format="png",
                 )
 
-        targets = [canvas, source, revision, case, mode, guided, seed, out_a, out_b, wipe, status]
+        targets = [canvas, source, revision, case, mode, guided, seed, out_a, out_b, wipe, status, run]
 
         def reset_canvas(image, note, *, index=None, hole=None, shared_seed=2019):
             version = token_hex(8)
             value = _canvas_value(image, version, hole)
-            return value, image, version, index, PAINTED, False, shared_seed, None, None, None, note
+            return (value, image, version, index, PAINTED, False, shared_seed,
+                    None, None, None, note, gr.update(interactive=True))
 
         def load_upload(path, framing):
             try:
