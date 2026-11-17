@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="439" viewBox="0 0 1160 439" role="img" aria-labelledby="title desc">
+  <title id="title">DeFLOCNet inference architecture</title>
+  <desc id="desc">Masked RGB, validity mask, and noise enter a five-level residual encoder. Skip features and a bottleneck feed the decoder. Sketch and sparse color have separate pyramids. Sketch features gate a color state propagated through decoder blocks. The prediction fills only the input hole.</desc>
+  <defs>
+    <style>
+      .panel { stroke-width: 1.4; }
+      .neutral { fill: #fff; stroke: #cbd4df; }
+      .rgb { fill: #edf0fa; stroke: #9ca9ca; }
+      .sketch { fill: #eaf4f0; stroke: #90b8ac; }
+      .color { fill: #f8efdf; stroke: #c5a775; }
+      .edge { fill: none; stroke-width: 1.8; stroke-linejoin: round; }
+      .rgbEdge { stroke: #536181; }
+      .sketchEdge { stroke: #2a706a; }
+      .colorEdge { stroke: #966123; }
+      text { font-family: Arial, Helvetica, sans-serif; }
+      .label { font-size: 17px; font-weight: bold; fill: #25314a; }
+      .detail { font-size: 14px; fill: #445069; }
+      .note { font-size: 14px; font-weight: bold; }
+    </style>
+  </defs>
+
+  <rect width="1160" height="439" rx="16" fill="#f8fafc"/>
+  <rect x=".75" y=".75" width="1158.5" height="437.5" rx="15.25" fill="none" stroke="#d8e0eb" stroke-width="1.5"/>
+  <path d="M 25 205 H 1135" stroke="#dce3eb"/>
+
+  <g class="edge">
+    <path class="rgbEdge" d="M214 135 H255"/>
+    <path class="rgbEdge" d="M431 135 H476"/>
+    <path class="rgbEdge" d="M654 135 H704"/>
+    <path class="rgbEdge" d="M888 135 H929"/>
+    <path class="rgbEdge" stroke-dasharray="5 4" d="M343 86 V50 H796 V86"/>
+    <path class="sketchEdge" d="M214 258 H255"/>
+    <path class="sketchEdge" d="M431 258 H762 V183"/>
+    <path class="sketchEdge" d="M557 258 V327"/>
+    <path class="colorEdge" d="M214 363 H255"/>
+    <path class="colorEdge" d="M431 363 H476"/>
+    <path class="colorEdge" d="M654 363 H834 V183"/>
+    <circle cx="557" cy="258" r="3.5" fill="#2a706a"/>
+  </g>
+  <path fill="#536181" d="M255 135l-9 -4v8z M431 135l-9 -4v8z M476 135l-9 -4v8z M704 135l-9 -4v8z M929 135l-9 -4v8z M796 86l-4 -9h8z"/>
+  <path fill="#2a706a" d="M255 258l-9 -4v8z M762 183l-4 9h8z M557 330l-4 -9h8z"/>
+  <path fill="#966123" d="M255 363l-9 -4v8z M476 363l-9 -4v8z M834 183l-4 9h8z"/>
+  <text x="569" y="35" text-anchor="middle" class="note" fill="#536181">Multi-scale skip connections</text>
+  <text x="569" y="307" class="note" fill="#2a706a">Sketch gate</text>
+
+  <g class="panel">
+    <rect class="neutral" x="26" y="86" width="188" height="97" rx="10"/>
+    <rect class="rgb" x="255" y="86" width="176" height="97" rx="10"/>
+    <rect class="rgb" x="476" y="86" width="178" height="97" rx="10"/>
+    <rect class="rgb" x="704" y="86" width="184" height="97" rx="10"/>
+    <rect class="neutral" x="929" y="86" width="205" height="97" rx="10"/>
+
+    <rect class="sketch" x="26" y="226" width="188" height="64" rx="10"/>
+    <rect class="sketch" x="255" y="226" width="176" height="64" rx="10"/>
+
+    <rect class="color" x="26" y="330" width="188" height="66" rx="10"/>
+    <rect class="color" x="255" y="330" width="176" height="66" rx="10"/>
+    <rect class="color" x="476" y="330" width="178" height="66" rx="10"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text class="label" x="120" y="117">Masked RGB</text>
+    <text class="detail" x="120" y="142">+ validity mask</text>
+    <text class="detail" x="120" y="162">+ noise inside the hole</text>
+
+    <text class="label" x="343" y="117">Residual encoder</text>
+    <text class="detail" x="343" y="144">256 → 128 → 64</text>
+    <text class="detail" x="343" y="164">→ 32 → 16</text>
+
+    <text class="label" x="565" y="117">Bottleneck</text>
+    <text class="detail" x="565" y="144">Residual blocks</text>
+    <text class="detail" x="565" y="164">and self-attention</text>
+
+    <text class="label" x="796" y="117">Residual decoder</text>
+    <text class="detail" x="796" y="144">Sketch + color modulation</text>
+    <text class="detail" x="796" y="164">Upsample 16 → 256</text>
+
+    <text class="label" x="1031.5" y="117">Completed image</text>
+    <text class="detail" x="1031.5" y="144">Predict RGB in the hole</text>
+    <text class="detail" x="1031.5" y="164">Copy visible input pixels</text>
+
+    <text class="label" x="120" y="252">Sketch lines</text>
+    <text class="detail" x="120" y="275">Optional</text>
+    <text class="label" x="343" y="252">Sketch pyramid</text>
+    <text class="detail" x="343" y="275">One feature map per scale</text>
+
+    <text class="label" x="120" y="357">Sparse color marks</text>
+    <text class="detail" x="120" y="380">Optional</text>
+    <text class="label" x="343" y="357">Color pyramid</text>
+    <text class="detail" x="343" y="380">Pool supplied pixels only</text>
+    <text class="label" x="565" y="357">Color state</text>
+    <text class="detail" x="565" y="380">Propagate coarse to fine</text>
+  </g>
+</svg>
